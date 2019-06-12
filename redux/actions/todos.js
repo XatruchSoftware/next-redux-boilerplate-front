@@ -1,4 +1,4 @@
-import { postTodo, getTodos, deleteTodo } from '../../lib/todos'
+import { postTodo, getTodos, deleteTodo, putTodo } from '../../lib/todos'
 
 export const addTodo = (todo) => ({
     type: 'ADD_TODO',
@@ -25,8 +25,24 @@ export const startRemoveTodo = ({ title } = {}) => {
     return async (dispatch, getState) => {
         try {
             const response = await deleteTodo(title)
-            console.log(response)
             dispatch(removeTodo({ ...response.todo }))
+        } catch (error) {
+            console.warn('Error', error.message)
+        }
+    }
+}
+
+export const editTodo = (title, updates) => ({
+    type: 'EDIT_TODO',
+    title,
+    updates
+})
+
+export const startEditTodo = (title, updates) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await putTodo(title, updates)
+            dispatch(editTodo(title, response.updatedTodo))
         } catch (error) {
             console.warn('Error', error.message)
         }

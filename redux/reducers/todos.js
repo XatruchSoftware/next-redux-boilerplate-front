@@ -6,6 +6,17 @@ const reducer = (state = todosReducerDefaultState, action) => {
             return [...state, action.todo]
         case 'REMOVE_TODO':
             return state.filter(({ title }) => title !== action.title)
+        case 'EDIT_TODO':
+            return state.map((todo) => {
+                if (todo.title === action.title) {
+                    return {
+                        ...todo,
+                        ...action.updates
+                    }
+                } else {
+                    return todo
+                }
+            })
         case 'SET_TODOS':
             return [...action.todos]
         default:
