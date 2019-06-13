@@ -16,7 +16,7 @@ export const startAddTodo = (todo) => {
     }
 }
 
-export const removeTodo = ({ title } = {}) => ({
+export const removeTodo = (title) => ({
     type: 'REMOVE_TODO',
     title
 })
@@ -24,8 +24,8 @@ export const removeTodo = ({ title } = {}) => ({
 export const startRemoveTodo = ({ title } = {}) => {
     return async (dispatch, getState) => {
         try {
-            const response = await deleteTodo(title)
-            dispatch(removeTodo({ ...response.todo }))
+            const { todo } = await deleteTodo(title)
+            dispatch(removeTodo(todo.title))
         } catch (error) {
             console.warn('Error', error.message)
         }

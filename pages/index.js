@@ -1,29 +1,19 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import Link from 'next/link'
-
-import { startAddTodo, startRemoveTodo, startEditTodo, setTodos } from '../redux/actions/todos'
+import { setTodos } from '../redux/actions/todos'
 import { getTodos } from '../lib/todos'
+import Layout from '../components/Layout'
+import TodoList from '../components/TodoList'
 
 class Index extends React.Component {
     static async getInitialProps({ reduxStore, req }) {
         const todos = await getTodos() 
         reduxStore.dispatch(setTodos(todos))
-        return { }
+        return { ...todos }
     }
     render () {
         return (
-            <div>
-                Hello
-                <p>{JSON.stringify(this.props.todos)}</p>
-                <button onClick={() => this.props.startAddTodo({ title: 'hello', body: 'there' })}>Add a todo</button>
-                <button onClick={() => this.props.startAddTodo({ title: 'hi', body: 'all' })}>Add another todo</button>
-                <button onClick={() => this.props.startRemoveTodo({ title: 'hello', body: 'there' })}>remove todo</button>
-                <button onClick={() => this.props.startEditTodo('hello', { title: 'hey', body: 'everyone' })}>edit todo</button>
-                <Link href="/test">
-                    <a>test</a>
-                </Link>
-            </div>
+            <Layout title="Home">
+                <TodoList />
+            </Layout>
         )
     }
 }
@@ -38,4 +28,4 @@ const mapDispatchToProps = (dispatch) => ({
     startEditTodo: (title, todo) => dispatch(startEditTodo(title, todo))
 })
 
-export default connect(mapStatetoProps, mapDispatchToProps)(Index)
+export { Index as default }
